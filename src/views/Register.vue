@@ -6,21 +6,21 @@
 
       <div class="field_container">
         <label>Логин</label>
-        <input type="text" class="text_field">
+        <input ref="loginField" type="text" class="text_field">
       </div>
 
       <div class="field_container">
         <label>Пароль</label>
-        <input type="password" class="text_field">
+        <input ref="passwordField" type="password" class="text_field">
       </div>
 
       <div class="field_container">
         <label>Почта</label>
-        <input type="email" class="text_field">
+        <input ref="emailField" type="email" class="text_field">
       </div>
 
       <div class="field_container">
-        <button>Зарегистрироваться</button>
+        <button @click="register">Зарегистрироваться</button>
       </div>
       <div class="field_container">
         <button @click="loginClick">Войти</button>
@@ -36,11 +36,24 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Register",
   methods: {
     loginClick() {
       this.$router.push({ path: 'login'})
+    },
+    register() {
+      axios.post('/api/auth/signup', {
+        username: this.$refs.loginField.value,
+        email: this.$refs.emailField.value,
+        password: this.$refs.passwordField.value
+      }).then(res => {
+        if (res.status === 200) {
+          this.$router.push({ path: 'login'})
+        }
+      })
     }
   }
 }

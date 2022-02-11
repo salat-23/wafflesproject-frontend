@@ -6,21 +6,16 @@
 
       <div class="field_container">
         <label>Логин</label>
-        <input type="text" class="text_field">
+        <input ref="loginField" type="text" class="text_field">
       </div>
 
       <div class="field_container">
         <label>Пароль</label>
-        <input type="password" class="text_field">
+        <input ref="passwordField" type="password" class="text_field">
       </div>
 
       <div class="field_container">
-        <a href="/login/oauth2/code/github" class="social">Войти с помощью Google</a>
-        <button class="social">Войти с помощью Vk</button>
-      </div>
-
-      <div class="field_container">
-        <button>Войти</button>
+        <button @click="login">Войти</button>
       </div>
       <div class="field_container">
         <button @click="registerClick">Регистрация</button>
@@ -37,11 +32,28 @@
 </template>
 
 <script>
+import {AUTH_LOGOUT, AUTH_REQUEST} from "@/modules/auth-actions";
+
 export default {
   name: "Login",
   methods: {
     registerClick() {
       this.$router.push({path: '/register'})
+    },
+    login: function () {
+      const combination = {
+        username: this.$refs.loginField.value,
+        password: this.$refs.passwordField.value
+      }
+      this.$store.dispatch(AUTH_REQUEST, combination).then(() => {
+        this.$router.push('/')
+      })
+    },
+    logout: function () {
+      this.$store.dispatch(AUTH_LOGOUT)
+          .then(() => {
+            this.$router.push('/login')
+          })
     }
   }
 }

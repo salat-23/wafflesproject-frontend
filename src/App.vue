@@ -9,9 +9,23 @@
 <script>
 
 import Header from "@/components/Header";
+import axios from "axios";
 
 export default {
-  components: {Header}
+  components: {Header},
+  created: function () {
+  axios.interceptors.response.use(undefined, function (err) {
+    return new Promise(function (resolve, reject) {
+      if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+        // if you ever get an unauthorized, logout the user
+        this.$store.dispatch(AUTH_LOGOUT)
+        this.$router.push('/')
+        // you can also redirect to /login if needed !
+      }
+      throw err;
+    });
+  });
+}
 }
 </script>
 

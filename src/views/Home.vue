@@ -44,9 +44,7 @@ export default {
     }
   },
   mounted() {
-    fetch('/api/hello')
-        .then(response => response.json())
-        .then(data => this.msg = data.title)
+
   }
 }
 </script>
