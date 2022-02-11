@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import axios from "axios";
 
 export default {
   name: "Register",
@@ -45,15 +44,16 @@ export default {
       this.$router.push({ path: 'login'})
     },
     register() {
-      axios.post('/api/auth/signup', {
+
+      const data = {
         username: this.$refs.loginField.value,
-        email: this.$refs.emailField.value,
-        password: this.$refs.passwordField.value
-      }).then(res => {
-        if (res.status === 200) {
-          this.$router.push({ path: 'login'})
-        }
-      })
+        password: this.$refs.passwordField.value,
+        email: this.$refs.emailField.value
+      }
+
+      this.$store.dispatch('register', data)
+          .then(() => this.$router.push('/'))
+          .catch(err => console.log(err))
     }
   }
 }

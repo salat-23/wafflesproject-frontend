@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import {AUTH_LOGOUT, AUTH_REQUEST} from "@/modules/auth-actions";
 
 export default {
   name: "Login",
@@ -45,15 +44,9 @@ export default {
         username: this.$refs.loginField.value,
         password: this.$refs.passwordField.value
       }
-      this.$store.dispatch(AUTH_REQUEST, combination).then(() => {
-        this.$router.push('/')
-      })
-    },
-    logout: function () {
-      this.$store.dispatch(AUTH_LOGOUT)
-          .then(() => {
-            this.$router.push('/login')
-          })
+      this.$store.dispatch('login', combination)
+          .then(() => this.$router.push('/'))
+          .catch(err => console.log(err))
     }
   }
 }

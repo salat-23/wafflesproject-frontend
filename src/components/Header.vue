@@ -8,37 +8,30 @@
       <RouterLink to="/">каталог</RouterLink>
       <RouterLink to="/">профиль</RouterLink>
       <RouterLink to="/">настройки</RouterLink>
-      <RouterLink @click="logout" v-if="isAuthenticated" to='/'>выйти</RouterLink>
+      <RouterLink @click="logout" v-if="isLoggedIn" to='/'>выйти</RouterLink>
       <RouterLink v-else to="/login">войти</RouterLink>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
-import {AUTH_LOGOUT, AUTH_REQUEST} from "@/modules/auth-actions";
+
 export default {
 
   name: "Header",
   data() {
-    return {
-
-    }
-  },
-  methods: {
-    logout() {
-      console.log('logging out')
-      this.$store.dispatch(AUTH_LOGOUT).then(() => {
-        this.$router.go(0)
-      })
-    }
+    return {}
   },
   computed: {
-    ...mapGetters(["getProfile", "isAuthenticated", "isProfileLoaded"]),
-    ...mapState({
-      authLoading: state => state.auth.status === "loading",
-      name: state => `${state.user.profile.title} ${state.user.profile.name}`
-    })
+    isLoggedIn: function() { return this.$store.getters.isLoggedIn }
+  },
+  methods: {
+    logout: function () {
+      this.$store.dispatch('logout')
+          .then(() => {
+            this.$router.push('/')
+          })
+    }
   }
 }
 </script>

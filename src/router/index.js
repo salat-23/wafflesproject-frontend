@@ -33,19 +33,19 @@ const routes = [
     path: '/account',
     name: 'Account',
     component: Account,
-    beforeEnter: ifAuthenticated
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login,
-    beforeEnter: ifNotAuthenticated
+    component: Login
   },
   {
     path: '/register',
     name: 'Register',
-    component: Register,
-    beforeEnter: ifNotAuthenticated
+    component: Register
   },
   {
     path: '/',
@@ -68,6 +68,18 @@ const router = createRouter({
   mode: 'history',
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters.isLoggedIn) {
+      next()
+      return
+    }
+    next('/login')
+  } else {
+    next()
+  }
 })
 
 export default router
