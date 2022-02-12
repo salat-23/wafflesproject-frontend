@@ -3,25 +3,8 @@ import Home from '../views/Home.vue'
 import Watch from "@/views/Watch";
 import Login from "@/views/Login";
 import Register from "@/views/Register";
-import store from "@/main";
 import Account from "@/views/Account";
-
-
-const ifNotAuthenticated = (to, from, next) => {
-  if (!store.getters.isAuthenticated) {
-    next()
-    return
-  }
-  next('/')
-}
-
-const ifAuthenticated = (to, from, next) => {
-  if (store.getters.isAuthenticated) {
-    next()
-    return
-  }
-  next('/login')
-}
+import store from "@/store";
 
 
 const routes = [

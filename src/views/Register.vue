@@ -44,13 +44,11 @@ export default {
       this.$router.push({ path: 'login'})
     },
     register() {
-
       const data = {
         username: this.$refs.loginField.value,
         password: this.$refs.passwordField.value,
         email: this.$refs.emailField.value
       }
-
       this.$store.dispatch('register', data)
           .then(() => this.$router.push('/'))
           .catch(err => console.log(err))

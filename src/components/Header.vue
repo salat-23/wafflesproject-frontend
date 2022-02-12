@@ -6,7 +6,7 @@
     <div class="container">
       <RouterLink to="/">главная</RouterLink>
       <RouterLink to="/">каталог</RouterLink>
-      <RouterLink to="/">профиль</RouterLink>
+      <RouterLink to="/account">профиль</RouterLink>
       <RouterLink to="/">настройки</RouterLink>
       <RouterLink @click="logout" v-if="isLoggedIn" to='/'>выйти</RouterLink>
       <RouterLink v-else to="/login">войти</RouterLink>

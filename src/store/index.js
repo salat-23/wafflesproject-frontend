@@ -23,6 +23,9 @@ export default new Vuex.Store({
             state.token = payload.token
             state.user = payload.user
         },
+        signup_error(state) {
+          state.status = 'exists'
+        },
         auth_error(state) {
             state.status = 'error'
         },
@@ -62,16 +65,13 @@ export default new Vuex.Store({
                 commit('auth_request')
                 axios({ url: '/api/auth/signup', data: user, method: 'POST' })
                     .then(resp => {
-                        const token = resp.data.token
-                        const user = resp.data.user
-
-                        localStorage.setItem('token', token)
-                        axios.defaults.headers.common['Authorization'] = token
-                        commit('auth_success', { token: token, user: user })
+                        if (resp.status !== 200) {
+                            commit('signup_error')
+                        }
                         resolve(resp)
                     })
                     .catch(err => {
-                        commit('auth_error', err)
+                        commit('auth_error')
                         localStorage.removeItem('token')
                         reject(err)
                     })
