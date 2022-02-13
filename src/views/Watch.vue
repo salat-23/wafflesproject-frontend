@@ -5,24 +5,12 @@
 
 
       <div class="item">
-        <img class="cover" src="https://i.pinimg.com/originals/d7/00/f9/d700f9ad661cb3314eeecfb290fa095d.jpg">
-        <h2 class="title">Очень длинное название аниме спасибо вам лайт новелы за то что пересказываете блять сюжет в
-          заголовке</h2>
-        <p class="description">
-          18 век, Атлантический океан. Фена Хаутман отправилась с отцом в морское путешествие, но вскоре на их корабль
-          нападают пираты. Фену сажают в шлюпку и ей удаётся спастить в одиночку. Прошло десять лет. Фена выросла
-          красавицей с белоснежной кожей и отливающими серебром волосами. Когда Фену настигла погоня, её спасает юноша в
-          красных доспехах и шлеме с оленьими рогами. Это был Юкимару, который обещал найти её. Их встреча разбудила
-          спящие в Фене воспоминания. Вспомнив эти слова, Фена с Юкимару и его друзья отравляется в новое морское
-          путешествие искать загадочный «Эдем».
-        </p>
+        <img class="cover" :src="series.cover">
+        <h2 class="title">{{ series.title }}</h2>
+        <p class="description">{{ series.description }}</p>
 
         <div class="tags">
-          <RouterLink to="/">Драма</RouterLink>
-          <RouterLink to="/">Экшн</RouterLink>
-          <RouterLink to="/">Я плакал как телка</RouterLink>
-          <RouterLink to="/">ПОЧЕМУ ТАКОЙ ДЛИННЫЙ ТЭГ</RouterLink>
-          <RouterLink to="/">ААААААААААААААААААА</RouterLink>
+          <RouterLink v-for="tag in series.tags" to="/">{{ tag }}</RouterLink>
         </div>
 
       </div>
@@ -34,25 +22,17 @@
           <h4>Эпизоды</h4>
           <h4>Статус</h4>
           <h4>Первоисточник</h4>
-          <h4>Сезон</h4>
-          <h4>Выпуск</h4>
           <h4>Студия</h4>
-          <h4>Рейтинг MPAA</h4>
           <h4>Возрастные ограничения</h4>
-          <h4>Длительность</h4>
         </div>
         <div class="details-second-col details-col">
-          <p>Сатоши Микамуя</p>
-          <p>ТВ Сериал</p>
+          <p>{{ series.director }}</p>
+          <p>{{ series.type }}</p>
           <p>5 / 12</p>
-          <p> Онгоинг</p>
-          <p> Манга</p>
-          <p>Зима 2022</p>
-          <p>с 10 января 2022 по 28 марта 2022</p>
-          <p>MAPPA</p>
-          <p>NC-17</p>
-          <p>18+</p>
-          <p>23 мин. ~ серия</p>
+          <p>{{ series.status }}</p>
+          <p>{{ series.source }}</p>
+          <p>{{ series.studio }}</p>
+          <p>{{ series.ageRestriction }}+</p>
         </div>
       </div>
 
@@ -66,7 +46,7 @@
 
         <div class="episode_selector">
 
-          <RouterLink v-for="episode in episodes" :to="{ path: '/' + title + '/' + episode.number}"
+          <RouterLink v-for="episode in episodes" :to="{ path: '/' + series.title + '/' + episode.number}"
                       class="episode_button" :class="{ 'active': (
                           (episode.number === 1 && this.$route.params.episode == null) ||
                           episode.number+'' === this.$route.params.episode) }">
@@ -77,39 +57,25 @@
       </div>
 
 
-      <div class="comments_block">
-        <div class="your_comment">
-          <img class="avatar" src="https://www.w3schools.com/howto/img_avatar.png">
-          <h3 class="username">Your username</h3>
-          <textarea ref="your_text" placeholder="Напишите свой комментарий.." @keydown="autosize" class="text">
-
-          </textarea>
-          <div class="button_container">
-            <button>Отправить</button>
-          </div>
-        </div>
-        <div class="comments">
-          <div class="comments_item">
-            <img class="avatar" src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/149.png"/>
-            <h3 class="username">Username loong ass</h3>
-            <p class="text">So this is a sample text that i use to test out comments bro this is so hard front end is so
-              fuckign loong to make bro i swear to god wbtw doctor stone is FUCKIGN AMAZING BRO GO WATCH IT</p>
-          </div>
-          <div class="comments_item">
-            <img class="avatar" src="https://www.w3schools.com/w3images/avatar2.png"/>
-            <h3 class="username">Username loong ass</h3>
-            <p class="text">So this is a sample text that i use to test out comments bro this is so hard front end is so
-              fuckign loong to make bro i swear to god wbtw doctor stone is FUCKIGN AMAZING BRO GO WATCH IT</p>
-          </div>
-          <div class="comments_item">
-            <img class="avatar" src="https://www.w3schools.com/w3images/avatar2.png"/>
-            <h3 class="username">Username loong ass</h3>
-            <p class="text">So this is a sample text that i use to test out comments bro this is so hard front end is so
-              fuckign loong to make bro i swear to god wbtw doctor stone is FUCKIGN AMAZING BRO GO WATCH IT</p>
-          </div>
-
-        </div>
-      </div>
+      <!--      <div class="comments_block">-->
+      <!--        <div class="your_comment">-->
+      <!--          <img class="avatar" src="https://www.w3schools.com/howto/img_avatar.png">-->
+      <!--          <h3 class="username">Your username</h3>-->
+      <!--          <textarea ref="your_text" placeholder="Напишите свой комментарий.." @keydown="autosize" class="text">-->
+      <!--          </textarea>-->
+      <!--          <div class="button_container">-->
+      <!--            <button>Отправить</button>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--        <div class="comments">-->
+      <!--          <div class="comments_item">-->
+      <!--            <img class="avatar" src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/149.png"/>-->
+      <!--            <h3 class="username">Username loong ass</h3>-->
+      <!--            <p class="text">So this is a sample text that i use to test out comments bro this is so hard front end is so-->
+      <!--              fuckign loong to make bro i swear to god wbtw doctor stone is FUCKIGN AMAZING BRO GO WATCH IT</p>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
 
 
     </div>
@@ -121,12 +87,13 @@
 
 <script>
 import router from "@/router";
+import axios from "axios";
 
 export default {
   name: "Watch",
   data() {
     return {
-      title: 'hello',
+      series: {},
       hasEpisodes: true,
       episodes: [
         {
@@ -169,35 +136,40 @@ export default {
         return
       }
       this.$router.push({path: '/' + this.$route.params.title, force: true})
-  },
-  scrollTo(element) {
-    element.scrollIntoView({
-      behavior: 'smooth',
-      block: "center"
-    })
-  },
-  autosize(e) {
-    let el = e.target
-    setTimeout(() => {
-      el.style.cssText = 'height:auto'
-      el.style.cssText = 'height:' + el.scrollHeight + 'px'
-    }, 0);
-  },
-  clearComment() {
-    this.$refs.your_text.textContent = ''
+    },
+    scrollTo(element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: "center"
+      })
+    },
+    autosize(e) {
+      let el = e.target
+      setTimeout(() => {
+        el.style.cssText = 'height:auto'
+        el.style.cssText = 'height:' + el.scrollHeight + 'px'
+      }, 0);
+    },
+    clearComment() {
+      this.$refs.your_text.textContent = ''
+    },
+    fetchSeries() {
+      axios.get('/api/series/title/' + this.$route.params.title)
+          .then(response => {
+            this.series = response.data
+          })
+    }
   }
-}
-,
-mounted()
-{
-  this.clearComment()
-  this.changeEpisode()
-}
-,
-updated()
-{
-  this.changeEpisode()
-}
+  ,
+  mounted() {
+    //this.clearComment()
+    this.changeEpisode()
+    this.fetchSeries()
+  }
+  ,
+  updated() {
+    this.changeEpisode()
+  }
 }
 </script>
 
@@ -207,6 +179,7 @@ updated()
 
 .watch {
   background: $secondary-light;
+  padding-bottom: 30px;
 }
 
 .player_container {
@@ -227,7 +200,7 @@ updated()
   overflow: hidden;
   display: grid;
   grid-template-columns: 0.7fr 1.6fr 0.7fr;
-  grid-template-rows: min-content fit-content(100%) min-content;
+  grid-template-rows: min-content 1fr min-content;
   grid-template-areas:
         "img title title"
         "img desc desc"

@@ -3,16 +3,17 @@
   <div class="container">
     <router-view/>
   </div>
-
+  <Footer/>
 </template>
 
 <script>
 
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 
 export default {
-  components: {Header},
+  components: {Footer, Header},
   computed: {
     isLoggedIn: function () {
       return this.$store.getters.isLoggedIn
@@ -35,7 +36,6 @@ export default {
   display: flex;
   justify-content: center;
   min-height: 100vh;
-
   > div {
     width: 1000px;
   }

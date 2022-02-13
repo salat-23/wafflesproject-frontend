@@ -3,52 +3,48 @@
 
     <div class="updates_container">
 
-      <router-link class="itemlink" to="/titlename">
+      <router-link v-for="series in content" class="itemlink" :to="'/'+series.title">
         <div class="item">
-          <img class="cover" src="https://i.pinimg.com/originals/d7/00/f9/d700f9ad661cb3314eeecfb290fa095d.jpg">
-          <h2 class="title">Очень длинное название аниме спасибо вам лайт новелы за то что пересказываете блять сюжет в
-            заголовке</h2>
+          <img class="cover" :src="series.cover">
+          <h2 class="title">{{ series.title }}</h2>
           <p class="description">
-            18 век, Атлантический океан. Фена Хаутман отправилась с отцом в морское путешествие, но вскоре на их корабль
-            нападают пираты. Фену сажают в шлюпку и ей удаётся спастить в одиночку. Прошло десять лет. Фена выросла
-            красавицей с белоснежной кожей и отливающими серебром волосами. Когда Фену настигла погоня, её спасает юноша в
-            красных доспехах и шлеме с оленьими рогами. Это был Юкимару, который обещал найти её. Их встреча разбудила
-            спящие в Фене воспоминания. Вспомнив эти слова, Фена с Юкимару и его друзья отравляется в новое морское
-            путешествие искать загадочный «Эдем».
+            {{ series.description }}
           </p>
 
           <div class="tags">
-            <RouterLink to="/">Драма</RouterLink>
-            <RouterLink to="/">Экшн</RouterLink>
-            <RouterLink to="/">Я плакал как телка</RouterLink>
-            <RouterLink to="/">ПОЧЕМУ ТАКОЙ ДЛИННЫЙ ТЭГ</RouterLink>
-            <RouterLink to="/">ААААААААААААААААААА</RouterLink>
+            <RouterLink v-for="tag in series.tags" to="/">{{ tag }}</RouterLink>
           </div>
         </div>
       </router-link>
-
-
-
-
-
     </div>
-
-
   </div>
 </template>
 
 <script>
 
 
+import axios from "axios"
+
 export default {
   name: 'Home',
   data() {
     return {
-      msg: ''
+      msg: '',
+      content: []
+    }
+  },
+  methods: {
+    loadContent() {
+      let pageNumber = 0
+      axios.get('/api/series/page/' + pageNumber)
+      .then(response => {
+        console.log(response)
+        this.content = response.data.content
+      })
     }
   },
   mounted() {
-
+    this.loadContent()
   }
 }
 </script>
@@ -65,6 +61,7 @@ export default {
   align-items: center;
 
   .itemlink {
+    padding: 0 0 50px 0;
     width: 90%;
     .item {
       border-bottom: 5px $border-color solid;
@@ -77,11 +74,16 @@ export default {
       display: grid;
       grid-template-columns: 0.7fr 1.6fr 0.7fr;
       //grid-template-rows: 0.5fr 1.5fr 1.6fr;
-      grid-template-rows: min-content min-content min-content;
+      grid-template-rows: min-content 1fr min-content;
       grid-template-areas:
         "img title title"
         "img desc desc"
         "tags tags tags";
+      align-content: start;
+      justify-content: start;
+      justify-items: start;
+      align-items: start;
+
 
       > * {
         border-radius: 10px;
