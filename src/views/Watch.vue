@@ -91,7 +91,6 @@
 <script>
 import router from "@/router";
 import axios from "axios";
-import {canDoThis} from "@/scripts/userRoleParser";
 
 export default {
   name: "Watch",
@@ -120,7 +119,6 @@ export default {
     }
   },
   methods: {
-    canDoThis,
     changeEpisode() {
       if (this.$route.params.episode !== null
           && Number(this.$route.params.episode) <= this.episodes.length

@@ -5,11 +5,12 @@
 
       <div class="item">
         <img class="cover" :src="series.cover">
-        <h2 class="title">{{ series.title }}</h2>
-        <p class="description">{{ series.description }}</p>
+        <textarea ref="autz1" @input="autosize" class="title textarea_clean">{{ series.title }}</textarea>
+        <textarea ref="autz2" @input="autosize" class="description textarea_clean">{{ series.description }}</textarea>
 
         <div class="tags">
-          <RouterLink v-for="tag in series.tags" :to="{ path: '/tag/'+tag }">{{ tag }}</RouterLink>
+          <tag @click.prevent.stop="removeTag" v-for="tag in series.tags" :to="{ path: '/tag/'+tag }">{{ tag }}</tag>
+          <tag class="special">Добавить</tag>
         </div>
       </div>
 
@@ -59,7 +60,6 @@
 </template>
 
 <script>
-import {canDoThis} from "@/scripts/userRoleParser";
 import axios from "axios";
 
 export default {
@@ -97,7 +97,6 @@ export default {
     this.changeEpisode()
   },
   methods: {
-    canDoThis,
     changeEpisode() {
       if (this.$route.params.episode !== null
           && Number(this.$route.params.episode) <= this.episodes.length
@@ -140,6 +139,12 @@ export default {
         el.style.cssText = 'height:' + el.scrollHeight + 'px'
       }, 0);
     },
+    autosizeInit(e) {
+      setTimeout(() => {
+        e.style.cssText = 'height:auto'
+        e.style.cssText = 'height:' + e.scrollHeight + 'px'
+      }, 0);
+    },
     clearComment() {
       this.$refs.your_text.textContent = ''
     },
@@ -148,7 +153,15 @@ export default {
           .then(response => {
             this.series = response.data
             this.editLink = '/edit/' + this.series.title
+            this.autosizeInit(this.$refs.autz1)
+            this.autosizeInit(this.$refs.autz2)
           })
+    },
+    removeTag(e) {
+      let el = e.target
+      setTimeout(() => {
+        el.remove()
+      })
     }
   }
 }
@@ -168,6 +181,14 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+.textarea_clean {
+  background: none;
+  outline: none;
+  border: none;
+  resize: none;
+  height: fit-content;
 }
 
 
@@ -203,6 +224,8 @@ export default {
   }
 
   .title {
+    font-size: 24px;
+
     color: $title-color;
     -webkit-text-stroke: 0.35px $title-stroke;
     width: available;
@@ -230,7 +253,9 @@ export default {
     margin-left: 10px;
     grid-area: tags;
 
-    a {
+
+    tag {
+      cursor: pointer;
       display: inline-block;
       height: 24px;
       line-height: 24px;
@@ -249,6 +274,27 @@ export default {
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
       font-weight: bold;
       z-index: -0.1;
+    }
+
+    tag.special {
+      background: $type-face;
+    }
+    tag.special:before {
+      border-color: transparent $type-face transparent transparent;
+    }
+
+    tag.special:hover {
+       background: $main-twin;
+    }
+    tag.special:hover:before {
+      border-color: transparent $main-twin transparent transparent;
+    }
+
+    tag:hover {
+      background: $secondary-dark;
+    }
+    tag:hover:before {
+      border-color: transparent $secondary-dark transparent transparent;
     }
 
     :before {
