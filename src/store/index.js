@@ -2,6 +2,8 @@
 import Vuex from 'vuex'
 import axios from 'axios'
 
+const localStorageRole = 'role'
+
 export default new Vuex.Store({
     state: {
         status: '',
@@ -50,12 +52,18 @@ export default new Vuex.Store({
 
                         localStorage.setItem('token', token)
                         axios.defaults.headers.common['Authorization'] = token
+
+                        axios.get('/api/users/me')
+                            .then(meResp => {
+                                localStorage.setItem(localStorageRole, meResp.data.role)
+                            })
                         commit('auth_success', { token: token, user: user })
                         resolve(resp)
                     })
                     .catch(err => {
                         commit('auth_error')
                         localStorage.removeItem('token')
+                        localStorage.removeItem(localStorageRole)
                         reject(err)
                     })
             })
@@ -73,6 +81,7 @@ export default new Vuex.Store({
                     .catch(err => {
                         commit('auth_error')
                         localStorage.removeItem('token')
+                        localStorage.removeItem(localStorageRole)
                         reject(err)
                     })
             })
@@ -81,6 +90,7 @@ export default new Vuex.Store({
             return new Promise((resolve, reject) => {
                 commit('logout')
                 localStorage.removeItem('token')
+                localStorage.removeItem(localStorageRole)
                 delete axios.defaults.headers.common['Authorization']
                 resolve()
             })

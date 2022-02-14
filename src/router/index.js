@@ -5,6 +5,7 @@ import Login from "@/views/Login";
 import Register from "@/views/Register";
 import Account from "@/views/Account";
 import store from "@/store";
+import EditSeries from "@/views/EditSeries";
 
 
 const routes = [
@@ -39,6 +40,16 @@ const routes = [
     path: '/:title',
     name: 'Watch',
     component: Watch
+  },
+  {
+    path: '/tag/:tag',
+    name: 'Tag',
+    component: Home
+  },
+  {
+    path: '/edit/:title',
+    name: 'EditSeries',
+    component: EditSeries
   },
   {
     path: '/:title/:episode',

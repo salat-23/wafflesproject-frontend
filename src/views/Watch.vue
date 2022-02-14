@@ -3,16 +3,19 @@
   <div class="watch">
     <div class="player_container">
 
-
       <div class="item">
         <img class="cover" :src="series.cover">
         <h2 class="title">{{ series.title }}</h2>
         <p class="description">{{ series.description }}</p>
 
         <div class="tags">
-          <RouterLink v-for="tag in series.tags" to="/">{{ tag }}</RouterLink>
+          <RouterLink v-for="tag in series.tags" :to="{ path: '/tag/'+tag }">{{ tag }}</RouterLink>
         </div>
+      </div>
 
+
+      <div v-if="isAbleEdit" class="edit">
+        <RouterLink class="edit_link" :to="{ path: '/edit/'+series.title }">Изменить</RouterLink>
       </div>
 
       <div class="details">
@@ -88,12 +91,15 @@
 <script>
 import router from "@/router";
 import axios from "axios";
+import {canDoThis} from "@/scripts/userRoleParser";
 
 export default {
   name: "Watch",
   data() {
     return {
+      user: localStorage.getItem('user'),
       series: {},
+      editLink: '',
       hasEpisodes: true,
       episodes: [
         {
@@ -107,7 +113,14 @@ export default {
       ]
     }
   },
+  computed: {
+    isAbleEdit() {
+      let curRole = localStorage.getItem('role');
+      return curRole === 'ROLE_ADMIN' || curRole === 'ROLE_MEMBER'
+    }
+  },
   methods: {
+    canDoThis,
     changeEpisode() {
       if (this.$route.params.episode !== null
           && Number(this.$route.params.episode) <= this.episodes.length
@@ -157,6 +170,7 @@ export default {
       axios.get('/api/series/title/' + this.$route.params.title)
           .then(response => {
             this.series = response.data
+            this.editLink = '/edit/' + this.series.title
           })
     }
   }
@@ -295,6 +309,23 @@ export default {
       -webkit-box-shadow: -1px -1px 2px rgba(0, 0, 0, 0.4);
       box-shadow: -1px -1px 2px rgba(0, 0, 0, 0.4);
     }
+  }
+}
+
+.edit {
+  padding: 30px 0;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 5px $border-color solid;
+  .edit_link {
+    border-radius: 5px;
+    width: 50%;
+    font-size: 25px;
+    text-align: center;
+    background: $secondary-dark;
+
   }
 }
 
