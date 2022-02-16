@@ -1,16 +1,18 @@
 <template>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <button @click="saveChanges" class="floating_button"><i class="fa fa-save"></i></button>
   <div class="watch">
     <div class="player_container">
 
       <div class="item">
-        <img class="cover" :src="series.cover">
+        <img class="cover" @drop="" :src="series.cover">
         <textarea ref="autz1" @input="autosize" class="title textarea_clean">{{ series.title }}</textarea>
         <textarea ref="autz2" @input="autosize" class="description textarea_clean">{{ series.description }}</textarea>
 
         <div class="tags">
           <tag @click.prevent.stop="removeTag" v-for="tag in series.tags" :to="{ path: '/tag/'+tag }">{{ tag }}</tag>
-          <tag class="special">Добавить</tag>
+          <tag @click="addTag" v-if="!isAddingTag" class="special">Добавить</tag>
+          <tag @keydown.enter="saveTag" @dblclick="cancelTag" v-else class="special"><input ref="tagInput"/></tag>
         </div>
       </div>
 
@@ -18,20 +20,28 @@
         <div class="details-first-col details-col">
           <h4>Режиссер</h4>
           <h4>Тип</h4>
-          <h4>Эпизоды</h4>
           <h4>Статус</h4>
           <h4>Первоисточник</h4>
           <h4>Студия</h4>
           <h4>Возрастные ограничения</h4>
         </div>
         <div class="details-second-col details-col">
-          <p>{{ series.director }}</p>
-          <p>{{ series.type }}</p>
-          <p>5 / 12</p>
-          <p>{{ series.status }}</p>
-          <p>{{ series.source }}</p>
-          <p>{{ series.studio }}</p>
-          <p>{{ series.ageRestriction }}+</p>
+          <input class="details_edit_el" :value="series.director"/>
+          <select class="details_edit_el" :value="series.type">
+            <option value="ТВ сериал">ТВ Сериал</option>
+            <option value="Фильм">Фильм</option>
+          </select>
+          <select class="details_edit_el" :value="series.status">
+            <option value="ONGOING">Онгоинг</option>
+            <option value="OUT">Вышел</option>
+            <option value="PAUSED">Приостоновлен</option>
+          </select>
+          <select class="details_edit_el" :value="series.source">
+            <option value="Манга">Манга</option>
+            <option value="Новелла">Лайт-новелла</option>
+          </select>
+          <input class="details_edit_el" :value="series.studio"/>
+          <input class="details_edit_el" type="number" :value="series.ageRestriction"/>
         </div>
       </div>
 
@@ -61,14 +71,17 @@
 
 <script>
 import axios from "axios";
+import SelectTags from "@/components/SelectTags";
 
 export default {
   name: "EditSeries",
+  components: {SelectTags},
   data() {
     return {
       user: localStorage.getItem('user'),
       series: {},
       editLink: '',
+      isAddingTag: false,
       hasEpisodes: true,
       episodes: [
         {
@@ -97,6 +110,22 @@ export default {
     this.changeEpisode()
   },
   methods: {
+    saveChanges() {
+
+    },
+    cancelTag() {
+      this.$refs.tagInput.value = ''
+      this.isAddingTag = false;
+    },
+    saveTag() {
+      let tagName = this.$refs.tagInput.value
+      this.$refs.tagInput.value = ''
+      this.series.tags.push(tagName)
+      this.isAddingTag = false;
+    },
+    addTag() {
+      this.isAddingTag = true;
+    },
     changeEpisode() {
       if (this.$route.params.episode !== null
           && Number(this.$route.params.episode) <= this.episodes.length
@@ -171,6 +200,23 @@ export default {
 
 @import "@/assets/_global_style.scss";
 
+.floating_button {
+  z-index: 2;
+  right: 5px;
+  bottom: 5px;
+  position: fixed;
+  width: 100px;
+  height: 100px;
+  background: $secondary-dark;
+  border: 5px $border-color solid;
+  border-radius: 50%;
+  color: $border-color;
+  font-size: 300%;
+}
+.floating_button:hover {
+  background: $secondary-light;
+  color: $type-face;
+}
 
 .watch {
   background: $secondary-light;
@@ -369,6 +415,15 @@ export default {
 
   .details-second-col {
     width: available;
+
+    .details_edit_el {
+      height: 20px;
+    }
+    .slim {
+      font-size: 16px;
+      width: 30px;
+    }
+
   }
 
 
