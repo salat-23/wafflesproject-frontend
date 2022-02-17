@@ -4,8 +4,8 @@
   <div class="watch">
     <div class="player_container">
 
-      <div class="item">
-        <img class="cover" @drop="" :src="series.cover">
+      <div class="item" @drop.prevent="uploadImage">
+        <img class="cover" :src="series.cover">
         <textarea ref="autz1" @input="autosize" class="title textarea_clean">{{ series.title }}</textarea>
         <textarea ref="autz2" @input="autosize" class="description textarea_clean">{{ series.description }}</textarea>
 
@@ -110,6 +110,20 @@ export default {
     this.changeEpisode()
   },
   methods: {
+    uploadImage(event) {
+      event.preventDefault()
+      let file = event.dataTransfer.files[0]
+      let bodyFormData = new FormData();
+      bodyFormData.append('cover', file)
+      axios({
+        method: 'post',
+        url: '/api/series/cover/'+this.series.id,
+        data: bodyFormData,
+        headers: { "Content-Type": "multipart/form-data" }
+      }).then(resp => {
+        this.series.cover = resp.data.url
+      })
+    },
     saveChanges() {
 
     },
