@@ -1,19 +1,9 @@
-# frontend
+# This repository contains a front end portion of WafflesProject website.
 
-## Project setup
-```
-npm install
-```
+Front end is written in Vue.js using options api. 
+It has a way to authorize and authenticate users through JWT tokens.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+This front end also needs a back end contained in this repository - https://github.com/salat-23/wafflesproject2.0/
 
-### Compiles and minifies for production
-```
-npm run build
-```
+Down below are some screenshots of the site:
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
